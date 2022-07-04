@@ -1,10 +1,10 @@
-﻿class ParentList<T>
+abstract class ParentList<T>
 {
     // скрытые поля
-    private int indicator; // указатель
+    protected virtual int indicator { get; set; } // указатель
     private List<T> parentList = new List<T>(); // основное хранилище связного списка
-    private bool is_head_status;
-    private bool is_tail_status;
+    protected virtual bool is_head_status { get; set; }
+    protected virtual bool is_tail_status { get; set; }
     private bool is_value_status;
     private int head_status;
     private int tail_status;
@@ -19,8 +19,8 @@
     // интерфейс класса, реализующий АТД LinkedList
 
     public const int HEAD_NIL = 0;
-    public const int HEAD_RIGH_OK = 1; 
-    public const int HEAD_RIGH_ERR = 2;
+    public const int HEAD_OK = 1; 
+    public const int HEAD_ERR = 2;
 
     public const int TAIL_NIL = 0;
     public const int TAIL_OK = 1;
@@ -68,13 +68,13 @@
         if (size() >= 1)
         {
             indicator = 0;
-            head_status = HEAD_RIGH_OK;
+            head_status = HEAD_OK;
             is_head_status = true;
             is_tail_status = false;
         }
         else
         {
-            head_status = HEAD_RIGH_ERR;
+            head_status = HEAD_ERR;
         }
     }    
     // предусловие: список не пуст;
@@ -357,5 +357,67 @@
     {
         return find_status;
     }
+    public int get_get_status()
+    {
+        return get_status;
+    }
+}
 
+abstract class LinkedList<T> : ParentList<T>
+{
+    // конструктор
+    public LinkedList()
+    {
+        clear();
+    }     
+        
+}
+
+
+abstract class TwoWayList<T> : ParentList<T>
+{
+    protected virtual int indicator { get; set; }
+    protected virtual bool is_head_status { get; set; }
+    protected virtual bool is_tail_status { get; set; }
+
+    private int left_status;
+
+    public const int LEFT_NIL = 0;
+    public const int LEFT_OK = 1;
+    public const int LEFT_ERR = 2;
+    // конструктор
+    public TwoWayList()
+    {
+
+    }
+    // предусловие: левее курсора есть элемент; 
+    // постусловие: курсор сдвинут на один узел влево
+    public void left()
+    {
+        if (size() > 1)
+        {            
+            if (indicator == 1)
+            {
+                indicator = 0;
+                is_head_status = true;
+            }
+            else
+            {
+                indicator--;
+                is_head_status = false;
+            }
+            left_status = LEFT_OK;
+            
+            is_tail_status = false;
+        }
+        else
+        {
+            left_status = LEFT_ERR;
+        }
+    }
+
+    public int get_left_status() // успешно; левее нету элемента
+    {
+        return left_status;
+    }
 }
