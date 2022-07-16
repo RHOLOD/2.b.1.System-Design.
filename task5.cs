@@ -1,7 +1,7 @@
 ﻿abstract class Queue<T>
 {
     // скрытые поля
-    private List<T> queue; // основное хранилище очереди
+    private List<T> queue = new List<T>(); // основное хранилище очереди
     private int pop_status;
     private int dequeue_status;
 
